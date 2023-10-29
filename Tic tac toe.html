@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic-Tac-Toe Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: black;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 2px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #333;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: purple;
+            cursor: pointer;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        .cell:hover {
+            background-color: #f2f2f2;
+        }
+        .reset-button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 1.5em;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .reset-button:hover {
+            background-color: #555;
+        }
+        .message {
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: purple;
+        }
+
+        @keyframes breathing {
+            0% {
+                background-color: purple;
+                color: green; /* Change text color */
+            }
+            50% {
+                background-color: green;
+                color: purple; /* Change text color */
+            }
+            100% {
+                background-color: purple;
+                color: green; /* Change text color */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe Game</h1>
+    <div class="board">
+        <div class="cell" onclick="makeMove(this)"></div>
+        <div class="cell" onclick="makeMove(this)"></div>
+        <div class="cell" onclick="makeMove(this)"></div>
+        <div class="cell" onclick="makeMove(this)"></div>
+        <div class="cell" onclick="makeMove(this)"></div>
+        <div class="cell" onclick="makeMove(this)"></div>
+        <div class="cell" onclick="makeMove(this)"></div>
+        <div class="cell" onclick="makeMove(this)"></div>
+        <div class="cell" onclick="makeMove(this)"></div>
+    </div>
+    <button class="reset-button" onclick="resetGame()">Reset Game</button>
+    <p class="message" id="message"></p>
+
+    <script>
+        let currentPlayer = 'X';
+        let gameOver = false;
+
+        function makeMove(cell) {
+            if (!gameOver && cell.textContent === '') {
+                cell.textContent = currentPlayer;
+                if (checkWinner(currentPlayer)) {
+                    document.getElementById("message").textContent = `${currentPlayer} wins!`;
+                    gameOver = true;
+                } else if (isBoardFull()) {
+                    document.getElementById("message").textContent = "It's a draw!";
+                    gameOver = true;
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+        }
+
+        function checkWinner(player) {
+            const cells = document.querySelectorAll('.cell');
+            const winCombos = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            return winCombos.some(combo => {
+                return combo.every(index => cells[index].textContent === player);
+            });
+        }
+
+        function isBoardFull() {
+            const cells = document.querySelectorAll('.cell');
+            return Array.from(cells).every(cell => cell.textContent !== '');
+        }
+
+        function resetGame() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => cell.textContent = '');
+            document.getElementById("message").textContent = '';
+            currentPlayer = 'X';
+            gameOver = false;
+        }
+    </script>
+</body>
+</html>
